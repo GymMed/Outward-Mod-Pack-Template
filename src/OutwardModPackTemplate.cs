@@ -16,7 +16,7 @@ using OutwardModsCommunicator.EventBus;
 namespace OutwardModPackTemplate
 {
     [BepInPlugin(GUID, NAME, VERSION)]
-    // if other mod pack is overwritting configs values you would add dependency to load your mod after it, to overwrite
+    // if other mod pack is overwritting configs values you would add dependency to load your mod after it, to overwrite.
     // soft dependency means that your mod can work without it and should be loaded even if dependency is missing
     // you can do the same through manifest.json(look into thunderstore documentation) and just delete this line if you like
     [BepInDependency(OutwardModsCommunicator.OMC.GUID, BepInDependency.DependencyFlags.SoftDependency)]
@@ -36,7 +36,6 @@ namespace OutwardModPackTemplate
 
         // If you need settings, define them like so:
         //public static ConfigEntry<bool> ExampleConfig;
-        public static ConfigEntry<bool> IsMainModPack;
 
         // Awake is called when your plugin is created. Use this to set up your mod.
         internal void Awake()
@@ -59,6 +58,21 @@ namespace OutwardModPackTemplate
             // Listen to other mod event and execute function.
             // If you don't want to create function and listen to other mod you can delete this and OnTryEnchant method.
             EventBus.Subscribe("gymmed.outward_game_settings", "EnchantmentMenu@TryEnchant", OnTryEnchant);
+
+            // You can allow multiple mods to publish events and listen for all of them if they do
+            // People will be able to view it through EventBusDataPresenter
+            // I would recommend to name it GUID + "_*" instead of "*" so they know they publishing just for you
+            EventBus.Subscribe("*", "ExecuteMyCode", MyExecutingFunction);
+        }
+
+        private static void MyExecutingFunction(EventPayload payload)
+        {
+            if (payload == null) return;
+
+            // try to retrieve passed event data, don't forget to check if retrieve didn't fail
+            //string name = payload.Get<string>("name", null);
+
+            LogSL($"{GUID} caught published event!");
         }
 
         private static void OnTryEnchant(EventPayload payload)
@@ -92,6 +106,7 @@ namespace OutwardModPackTemplate
             if (enchantment == null)
                 return;
 
+            // Log results and do what you want with it...
             LogSL($"{enchantment.Name} tried to be applied!");
         }
 
@@ -135,6 +150,8 @@ namespace OutwardModPackTemplate
 
                 // Log all registered events
                 EventBusDataPresenter.LogRegisteredEvents();
+                // Log all subsribers
+                EventBusDataPresenter.LogAllModsSubsribers();
             }
         }
     }
