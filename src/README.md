@@ -6,7 +6,9 @@
   <img src="https://raw.githubusercontent.com/GymMed/Outward-Mod-Pack-Template/refs/heads/main/preview/images/Logo.png" alt="Logo"/>
 </div>
 
-A template for creating a C# Outward Mod.
+<div align="center">
+	A template for creating a C# Outward Mod.
+</div>
 
 ## How to use
 
@@ -18,7 +20,7 @@ A template for creating a C# Outward Mod.
 
 ## Tip
 
-Place automatically `.dll` document to your thunderstore profile for quicker testing.
+Place automatically `.dll` document to your `r2modman` profile for quicker testing.
 Inside `src/OutwardModPackTemplate.csproj` and in `Project` tag you can add:
 
 <pre><code>&lt;Target Name="PostBuild" AfterTargets="PostBuildEvent"&gt;

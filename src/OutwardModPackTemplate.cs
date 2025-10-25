@@ -65,7 +65,7 @@ namespace OutwardModPackTemplate
             EventBus.Subscribe("*", "ExecuteMyCode", MyExecutingFunction);
         }
 
-        private static void MyExecutingFunction(EventPayload payload)
+        private void MyExecutingFunction(EventPayload payload)
         {
             if (payload == null) return;
 
@@ -75,7 +75,7 @@ namespace OutwardModPackTemplate
             LogSL($"{GUID} caught published event!");
         }
 
-        private static void OnTryEnchant(EventPayload payload)
+        private void OnTryEnchant(EventPayload payload)
         {
             if (payload == null) return;
 
@@ -119,14 +119,14 @@ namespace OutwardModPackTemplate
         //  Log message with prefix
         public static void LogMessage(string message)
         {
-            Log.LogMessage($"[{OutwardModPackTemplate.prefix}] {message}");
+            Log.LogMessage($"{OutwardModPackTemplate.prefix} {message}");
         }
 
         // Log message through side loader, helps to see it
         // if you are using UnityExplorer and want to see live logs
         public static void LogSL(string message)
         {
-            SL.Log($"[{OutwardModPackTemplate.prefix}] {message}");
+            SL.Log($"{OutwardModPackTemplate.prefix} {message}");
         }
 
         // Gets mod dll location
