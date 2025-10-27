@@ -32,6 +32,9 @@ namespace OutwardModPackTemplate
         // Choose prefix for log messages for quicker search and readablity
         public static string prefix = "[MyModPack]";
 
+        // Will be used as id for accepting events from other mods 
+        public const string EVENTS_LISTENER_GUID = GUID + "_*";
+
         internal static ManualLogSource Log;
 
         // If you need settings, define them like so:
@@ -59,10 +62,14 @@ namespace OutwardModPackTemplate
             // If you don't want to create function and listen to other mod you can delete this and OnTryEnchant method.
             EventBus.Subscribe("gymmed.outward_game_settings", "EnchantmentMenu@TryEnchant", OnTryEnchant);
 
+            // Let's register our listener event to provide what kind of parameters we expect for others to see
+            // This is not required. Just helper for others and good practice.
+            EventBus.RegisterEvent(EVENTS_LISTENER_GUID, "ExecuteMyCode", ("callerGUID", typeof(string), "Optional variable for printing caller id."));
+
             // You can allow multiple mods to publish events and listen for all of them if they do
             // People will be able to view it through EventBusDataPresenter
             // I would recommend to name it GUID + "_*" instead of "*" so they know they publishing just for you
-            EventBus.Subscribe("*", "ExecuteMyCode", MyExecutingFunction);
+            EventBus.Subscribe(EVENTS_LISTENER_GUID, "ExecuteMyCode", MyExecutingFunction);
         }
 
         private void MyExecutingFunction(EventPayload payload)
@@ -70,9 +77,15 @@ namespace OutwardModPackTemplate
             if (payload == null) return;
 
             // try to retrieve passed event data, don't forget to check if retrieve didn't fail
-            //string name = payload.Get<string>("name", null);
+            string modId = payload.Get<string>("callerGUID", null);
 
-            LogSL($"{GUID} caught published event!");
+            // check if passed variable is not null or empty string ""
+            if(!string.IsNullOrEmpty(modId))
+                LogSL($"{modId} successfully passed callerGUID!");
+
+            // log passed payload
+            EventBusDataPresenter.LogPayload(payload);
+            LogSL($"{GUID} caught and executed published event!");
         }
 
         private void OnTryEnchant(EventPayload payload)
