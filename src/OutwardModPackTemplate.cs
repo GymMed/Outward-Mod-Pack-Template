@@ -86,6 +86,8 @@ namespace OutwardModPackTemplate
             if (menu == null)
             {
                 LogSL("Mod gymmed.outward_game_settings event EnchantmentMenu@TryEnchant returned null for EnchantmentMenu");
+                // log received payload for errors inspection
+                EventBusDataPresenter.LogPayload(payload);
                 return;
             }
 
