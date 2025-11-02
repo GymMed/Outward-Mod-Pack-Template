@@ -24,9 +24,9 @@ Place automatically `.dll` document to your `r2modman` profile for quicker testi
 Inside `src/OutwardModPackTemplate.csproj` and in `Project` tag you can add:
 
 <pre><code>&lt;Target Name="PostBuild" AfterTargets="PostBuildEvent"&gt;
-  &lt;Exec Command="call &amp;quot;$(ProjectDir)..\Public\placeBuild.bat&amp;quot;" /&gt;
+  &lt;Exec Command="call &amp;quot;$(ProjectDir)..\Public\DontZip\placeBuild.bat&amp;quot;" /&gt;
 &lt;/Target&gt;</code></pre>
 
-Make sure that you changed variables inside `..\Public\placeBuild.bat`.
+Make sure that you changed variables inside `..\Public\DontZip\placeBuild.bat`.
 
 For further help, see the [Outward Modding Wiki](https://outward.fandom.com/wiki/Getting_Started_Developing_Mods), or join the [Outward Modding Discord](https://discord.gg/zKyfGmy7TR).

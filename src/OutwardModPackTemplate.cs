@@ -64,7 +64,7 @@ namespace OutwardModPackTemplate
 
             // Let's register our listener event to provide what kind of parameters we expect for others to see
             // This is not required. Just helper for others and good practice.
-            EventBus.RegisterEvent(EVENTS_LISTENER_GUID, "ExecuteMyCode", ("callerGUID", typeof(string), "Optional variable for printing caller id."));
+            EventBus.RegisterEvent(EVENTS_LISTENER_GUID, "ExecuteMyCode", "My code/method description", ("callerGUID", typeof(string), "Optional variable for printing caller id."));
 
             // You can allow multiple mods to publish events and listen for all of them if they do
             // People will be able to view it through EventBusDataPresenter
