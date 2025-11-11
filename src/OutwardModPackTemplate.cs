@@ -18,7 +18,8 @@ namespace OutwardModPackTemplate
     [BepInPlugin(GUID, NAME, VERSION)]
     // if other mod pack is overwritting configs values you would add dependency to load your mod after it, to overwrite.
     // soft dependency means that your mod can work without it and should be loaded even if dependency is missing
-    // you can do the same through manifest.json(look into thunderstore documentation) and just delete this line if you like
+    // don't forget to add dependencies to manifest.json(look into thunderstore documentation) for others to see them.
+    [BepInDependency(SideLoader.SL.GUID, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(OutwardModsCommunicator.OMC.GUID, BepInDependency.DependencyFlags.SoftDependency)]
     public class OutwardModPackTemplate : BaseUnityPlugin
     {
