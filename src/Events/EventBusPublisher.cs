@@ -10,10 +10,10 @@ namespace OutwardModPackTemplate.Events
     public static class EventBusPublisher
     {
         // Outward Game Settings mod has better examples.
-        public const string Event_Name_From_Other_Mod = "GUID";
+        public const string Event_NameFromOtherMod = "GUID";
 
         //other mods listener uid
-        public const string Other_Mod_Listener = "GUID";
+        public const string OtherMod_Listener = "GUID";
 
         public static void SendYourMessage(object yourVariable)
         {
@@ -21,7 +21,7 @@ namespace OutwardModPackTemplate.Events
             {
                 ["eventVariableName"] = yourVariable
             };
-            EventBus.Publish(Other_Mod_Listener, Event_Name_From_Other_Mod, payload);
+            EventBus.Publish(OtherMod_Listener, Event_NameFromOtherMod, payload);
         }
     }
 }
