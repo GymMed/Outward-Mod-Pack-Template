@@ -9,7 +9,7 @@ namespace OutwardModPackTemplate.Events
 {
     public static class EventBusSubscriber
     {
-        public const string Event_SerializeObject = "SerializeObject";
+        public const string Event_ExecuteMyCode = "ExecuteMyCode";
 
         public static void AddSubscribers()
         {
@@ -20,7 +20,8 @@ namespace OutwardModPackTemplate.Events
             // You can allow multiple mods to publish events and listen for all of them if they do
             // People will be able to view it through EventBusDataPresenter
             // I would recommend to name it GUID + "_*" instead of "*" so they know they publishing just for you
-            EventBus.Subscribe(OutwardModPackTemplate.EVENTS_LISTENER_GUID, "ExecuteMyCode", MyExecutingFunction);
+            // This time we use constants instead of retyping strings and possibly making typeo mistakes
+            EventBus.Subscribe(OutwardModPackTemplate.EVENTS_LISTENER_GUID, Event_ExecuteMyCode, MyExecutingFunction);
         }
 
         private static void MyExecutingFunction(EventPayload payload)
