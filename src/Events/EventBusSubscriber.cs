@@ -1,4 +1,5 @@
-﻿using OutwardModsCommunicator.EventBus;
+﻿using OutwardModPackTemplate.Utility.Enums;
+using OutwardModsCommunicator.EventBus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,10 @@ namespace OutwardModPackTemplate.Events
             if (payload == null) return;
 
             // try to retrieve passed event data, don't forget to check if retrieve didn't fail
-            string modId = payload.Get<string>("callerGUID", null);
+            // we use intellisense instead of writing each string by hand and possibly making
+            // mistakes that would require additional time to test
+            (string key, Type type, string description) callerGUIDParameter = EventRegistryParamsHelper.Get(EventRegistryParams.CallerGUID);
+            string modId = payload.Get<string>(callerGUIDParameter.key, null);
 
             // check if passed variable is not null or empty string ""
             if(!string.IsNullOrEmpty(modId))
@@ -45,7 +49,8 @@ namespace OutwardModPackTemplate.Events
             if (payload == null) return;
 
             // try to retrieve passed event data
-            EnchantmentMenu menu = payload.Get<EnchantmentMenu>("menu", null);
+            (string key, Type type, string description) menuParameter = EventRegistryParamsHelper.Get(EventRegistryParams.TryEnchantMenu);
+            EnchantmentMenu menu = payload.Get<EnchantmentMenu>(menuParameter.key, null);
 
             // if event data is null log and stop execution
             if (menu == null)
