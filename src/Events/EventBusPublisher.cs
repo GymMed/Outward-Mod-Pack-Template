@@ -1,4 +1,5 @@
-﻿using OutwardModsCommunicator.EventBus;
+﻿using OutwardModPackTemplate.Utility.Enums;
+using OutwardModsCommunicator.EventBus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,11 @@ namespace OutwardModPackTemplate.Events
         //other mods listener uid
         public const string OtherMod_Listener = "GUID";
 
-        public static void SendYourMessage(object yourVariable)
+        public static void SendYourMessage(string yourVariable)
         {
             var payload = new EventPayload
             {
-                ["eventVariableName"] = yourVariable
+                [EventRegistryParamsHelper.Get(EventRegistryParams.PlaceHolder).key] = yourVariable
             };
             EventBus.Publish(OtherMod_Listener, Event_NameFromOtherMod, payload);
         }

@@ -11,6 +11,7 @@ namespace OutwardModPackTemplate.Utility.Enums
     {
         CallerGUID,
         TryEnchantMenu,
+        PlaceHolder,
     }
 
     public static class EventRegistryParamsHelper
@@ -20,6 +21,7 @@ namespace OutwardModPackTemplate.Utility.Enums
             {
                 [EventRegistryParams.CallerGUID] = ("callerGUID", typeof(string), "Optional. Generated GUID to know who is publishing event."),
                 [EventRegistryParams.TryEnchantMenu] = ("menu", typeof(EnchantmentMenu), "Optional. Generated GUID to know who is publishing event."),
+                [EventRegistryParams.PlaceHolder] = ("placeHolder", typeof(object), "Optional. You would change this to your desired param."),
             };
 
         public static (string key, Type type, string description) Get(EventRegistryParams param) => _registry[param];
