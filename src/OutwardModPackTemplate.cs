@@ -11,7 +11,6 @@ using System.Reflection;
 using System.Text;
 using System.IO;
 using OutwardModsCommunicator.EventBus;
-using OutwardModPackTemplate.Events;
 
 // RENAME 'OutwardModPackTemplate' TO SOMETHING ELSE
 namespace OutwardModPackTemplate
@@ -60,21 +59,71 @@ namespace OutwardModPackTemplate
             // Harmony is for patching methods. If you're not patching anything, you can comment-out or delete this line.
             new Harmony(GUID).PatchAll();
 
-            // These EventBus classes are static because they act as simple helper modules.
+            // Listen to other mod event and execute function.
+            // If you don't want to create function and listen to other mod you can delete this and OnTryEnchant method.
+            EventBus.Subscribe("gymmed.outward_game_settings", "EnchantmentMenu@TryEnchant", OnTryEnchant);
 
-            // EventBusRegister  → defines and exposes events so other mods can use them
-            // EventBusSubscriber → adds listeners that handle events
-            // EventBusPublisher → provides methods to fire (publish) events
+            // Let's register our listener event to provide what kind of parameters we expect for others to see
+            // This is not required. Just helper for others and good practice.
+            EventBus.RegisterEvent(EVENTS_LISTENER_GUID, "ExecuteMyCode", "My code/method description", ("callerGUID", typeof(string), "Optional variable for printing caller id."));
 
-            // Initialize the EventBus system:
-            // 1. Register all events that other mods might access
-            EventBusRegister.RegisterEvents();
+            // You can allow multiple mods to publish events and listen for all of them if they do
+            // People will be able to view it through EventBusDataPresenter
+            // I would recommend to name it GUID + "_*" instead of "*" so they know they publishing just for you
+            EventBus.Subscribe(EVENTS_LISTENER_GUID, "ExecuteMyCode", MyExecutingFunction);
+        }
 
-            // 2. Add your event listeners (methods that react when events are triggered)
-            EventBusSubscriber.AddSubscribers();
+        private void MyExecutingFunction(EventPayload payload)
+        {
+            if (payload == null) return;
 
-            // 3. Publishers are called only where the game logic needs them.
-            //    For real-world examples, see the Outward Game Settings mod.
+            // try to retrieve passed event data, don't forget to check if retrieve didn't fail
+            string modId = payload.Get<string>("callerGUID", null);
+
+            // check if passed variable is not null or empty string ""
+            if(!string.IsNullOrEmpty(modId))
+                LogSL($"{modId} successfully passed callerGUID!");
+
+            // log passed payload
+            EventBusDataPresenter.LogPayload(payload);
+            LogSL($"{GUID} caught and executed published event!");
+        }
+
+        private void OnTryEnchant(EventPayload payload)
+        {
+            if (payload == null) return;
+
+            // try to retrieve passed event data
+            EnchantmentMenu menu = payload.Get<EnchantmentMenu>("menu", null);
+
+            // if event data is null log and stop execution
+            if (menu == null)
+            {
+                LogSL("Mod gymmed.outward_game_settings event EnchantmentMenu@TryEnchant returned null for EnchantmentMenu");
+                // log received payload for errors inspection
+                EventBusDataPresenter.LogPayload(payload);
+                return;
+            }
+
+            // Lets log success
+            LogSL($"{GUID} successfully communicated with gymmed.outward_game_settings mod and passed menu!");
+
+            // Get currently possible enchantmentID from EnchantmentMenu
+            int enchantmentID = menu.GetEnchantmentID();
+
+            // if enchatment couldn't be determined stop execution
+            if (enchantmentID == -1)
+                return;
+
+            // Retrieve enchantment
+            Enchantment enchantment = ResourcesPrefabManager.Instance.GetEnchantmentPrefab(enchantmentID);
+
+            // Assume that there is possibility that retrieve failed. Stop Code Execution
+            if (enchantment == null)
+                return;
+
+            // Log results and do what you want with it...
+            LogSL($"{enchantment.Name} tried to be applied!");
         }
 
         // Update is called once per frame. Use this only if needed.
