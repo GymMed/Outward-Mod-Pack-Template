@@ -15,7 +15,7 @@ namespace OutwardModPackTemplate.Events
             // This is not required. Just helper for others and good practice.
             EventBus.RegisterEvent(
                 OutwardModPackTemplate.EVENTS_LISTENER_GUID, 
-                "ExecuteMyCode", 
+                EventBusSubscriber.Event_ExecuteMyCode, 
                 "My code/method description", 
                 ("callerGUID", typeof(string), "Optional variable for printing caller id.")
             );
